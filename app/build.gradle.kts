@@ -11,7 +11,7 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "dev.pranav.applock"
+        applicationId = "dev.mayur.applock2"
         minSdk = 26
         targetSdk = 37
         versionCode = 251
