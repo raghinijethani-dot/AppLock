@@ -9,19 +9,13 @@ import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuRemoteProcess
 
 fun Context.isAccessibilityServiceEnabled(): Boolean {
-    val accessibilityServiceName =
-        "$packageName/$packageName.services.AppLockAccessibilityService"
-    val enabledServices = Settings.Secure.getString(
+    // Built from the real class name, not from packageName: in a clone with a new applicationId
+    // the package changes but the class stays in dev.pranav.applock.services.
+    val component = ComponentName(this, "dev.pranav.applock.services.AppLockAccessibilityService")
+    val enabled = Settings.Secure.getString(
         contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-    )
-    if (enabledServices?.contains(accessibilityServiceName) == true) {
-        return true
-    } else {
-        if (enabledServices?.contains("$packageName/.services.AppLockAccessibilityService") == true) {
-            return true
-        }
-    }
-    return false
+    ) ?: return false
+    return enabled.split(':').any { ComponentName.unflattenFromString(it) == component }
 }
 
 fun openAccessibilitySettings(context: Context) {
